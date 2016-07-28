@@ -1,0 +1,48 @@
+<!--
+MIT License
+
+Copyright (c) [2016] [Samuel G Scudere-Weiss]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <base target="_top">
+  </head>
+  <script>
+    function processData (form) {
+      var name = form.name.value;
+      var deleteData = form.data.checked;
+      google.script.run.removeSearch(name, deleteData);
+      google.script.host.close();
+    }
+  </script>
+  <body>
+    <FORM NAME="myform" ACTION="" METHOD="GET">
+      <p>Type the Name of the Search You Would Like to Delete.</p>
+      <INPUT TYPE="text" NAME="name" VALUE=""><P>
+      <p>Delete the assosiated search data? <INPUT TYPE="checkbox" NAME="data" VALUE="data"></p>
+      <p> ALERT: Checking the Box Will Delete the Page with Gathered Search Data! </p>
+      <INPUT TYPE="button" NAME="button" Value="Submit" onClick="processData(form)">
+      <INPUT TYPE="button" NAME="close" Value="Cancel" onClick="google.script.host.close()">
+    </FORM>
+  </body>
+</html>
