@@ -1,0 +1,240 @@
+<!--
+MIT License
+
+Copyright (c) [2016] [Samuel G Scudere-Weiss]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<HTML>
+  <HEAD>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <TITLE>Test Input</TITLE>
+    <SCRIPT LANGUAGE="JavaScript">
+    
+    function processData (form) {
+        var name = form.SearchName.value;
+        var s ="";
+        var x = form.All.value;
+        if (x!=""){ 
+          x=seperate(x);
+          for (var i = 0; i<x.length; i++)s+=x[i]+" ";
+        }
+        x = form.Exact.value;
+        if (x!=""){
+          if(s!="")s+="& ";
+          s+='"'+x+'"';         
+        }
+        x = form.Any.value;
+        if (x!=""){ 
+          if(s!="")s+="& ";
+          x=seperate(x);
+          s+=x[0]+" ";
+          for (var i=1; i<x.length; i++)s+="OR "+x[i] +" ";         
+        }
+        x = form.None.value;
+        if (x!=""){ 
+          if(s!="")s+="& ";
+          x=seperate(x);           
+          for (var i=0; i<x.length;i++){
+            s+="-"+x[i]+" ";
+          }
+        }
+        x = form.Hashtags.value;
+        if (x!=""){ 
+          if(s!="")s+="& ";
+          x=seperate(x);           
+          for (var i=0; i<x.length; i++){
+            var c = x[i];
+            if (c.charAt(0)=="#") s+=c+" ";
+            else s+="#"+c+" ";
+          }
+        }
+        x = form.list.value;
+        if (x!=""){
+          if(s!="")s+="&";
+          x=seperate(x);           
+          for (var i=0; i<x.length; i++)s+="list:"+x[i]+" ";         
+        }
+        x = form.From.value;
+        if (x!=""){
+          if(s!="")s+="&";
+          x=seperate(x);           
+          for (var i=0; i<x.length-1; i++)s+=" from:"+x[i]+" ";         
+        }
+        x = form.To.value;
+        if (x!=""){ 
+          if(s!="")s+="&";
+          x=seperate(x);           
+          for (var i=0; i<x.length-1; i++)s+=" to:"+x[i]+" ";         
+        }
+        x = form.Mention.value;
+        if (x!=""){ 
+          if(s!="")s+="&";
+          x=seperate(x);           
+          for (var i=0; i<x.length-1; i++)s+=" @"+x[i]+" ";         
+        }
+        if (s!="") s=percentEncode(s);
+        x = form.FromDate.value;
+        if (x!=""){           
+          s+="&since:"+x;         
+        }
+        x = form.ToDate.value;
+        if (x!=""){ 
+          s+="&until:"+x;         
+        }
+        if(form.retweets.checked == false) s+="&exclude=retweets";
+        x = form.Lang.value;
+        if (x!=""){           
+          s+="&lang="+x;         
+        }
+        if (s!="")s+="&count=100&include_entities=0";
+        if (s!="")google.script.run.newSearch(name,s);
+    }
+    
+    function percentEncode (s){
+      var encoded = "";
+      for (var i = 0; i < s.length; i++) {
+        switch(s.charAt(i)) {
+        case ' ':
+            var c='%20';
+            break;
+        case '!':
+            var c='%21';
+            break;
+        case '#':
+            var c='%23';
+            break;
+        case '$':
+            var c='%24';
+            break;
+        case '&':
+            var c='%26';
+            break;
+        case '\'':
+            var c='%27';
+            break;
+        case '(':
+            var c='%28';
+            break;
+        case ')':
+            var c='%29';
+            break;
+        case '*':
+            var c='%2A';
+            break;
+        case '+':
+            var c='%2B';
+            break;
+        case ',':
+            var c='%2C';
+            break;
+        case '/':
+            var c='%2F';
+            break;
+        case ':':
+            var c='%3A';
+            break;
+        case ';':
+            var c='%3B';
+            break;
+        case '=':
+            var c='%3D';
+            break;
+        case '?':
+            var c='%3F';
+            break;
+        case '@':
+            var c='%40';
+            break;
+        case '[':
+            var c='%5B';
+            break;
+        case ']':
+            var c='%5D';
+            break;
+        case '-':
+            var c='%2D';
+            break;
+        case '\"':
+            var c='%22';
+            break;
+        default:
+            c=s.charAt(i);
+        }
+        encoded+=c;
+      }
+      return encoded;
+    }
+    
+    function seperate (s) {
+      var s1 = "";
+      var a = [""];
+      var count = 0;
+      for (var i=0; i<=s.length; i++){
+        var x= s.charAt(i);
+        if (x==" "||i==s.length){
+          a[count]=s1
+          count++;
+          s1="";
+        } else {
+          s1 += x;
+        }
+      }
+      return a;
+    }
+    </SCRIPT>
+  </HEAD>
+  <BODY>
+    <FORM NAME="myform" ACTION="" METHOD="GET">Search Parameters: <BR>
+      <p>Type the name of your search</p>
+      <INPUT TYPE="text" NAME="SearchName" VALUE=""><P>
+      <p>All of these words:</p>
+      <INPUT TYPE="text" NAME="All" VALUE=""><P>
+      <p>This Exact Phrase:</p>
+      <INPUT TYPE="text" NAME="Exact" VALUE=""><P>
+      <p>Any of these words:</p>
+      <INPUT TYPE="text" NAME="Any" VALUE=""><P>
+      <p>None of these words:</p>
+      <INPUT TYPE="text" NAME="None" VALUE=""><P>
+      <p>These Hashtags:</p>
+      <INPUT TYPE="text" NAME="Hashtags" VALUE=""><P>
+      <p>Language Code:</p>
+      <INPUT TYPE="text" NAME="Lang" VALUE="en"><P>
+      <p></p>
+      <p>From these Lists:(list_creator/list_name)</p>
+      <INPUT TYPE="text" NAME="list" VALUE=""><P>
+      <p>From these Acconts:</p>
+      <INPUT TYPE="text" NAME="From" VALUE=""><P>
+      <p>To these Accounts:</p>
+      <INPUT TYPE="text" NAME="To" VALUE=""><P>
+      <p>Mentioning these accounts:</p>
+      <INPUT TYPE="text" NAME="Mention" VALUE=""><P>
+      <p></p>
+      <p>From this date:(yyyy,mm,dd)</p>
+      <INPUT TYPE="text" NAME="FromDate" VALUE=""><P>
+      <p>To this date:(yyyy,mm,dd)</p>
+      <INPUT TYPE="text" NAME="ToDate" VALUE=""><P>
+      <p></p>
+      <p>Include Retweets? <INPUT TYPE="checkbox" NAME="retweets" VALUE="retweets"></p>
+      
+      <INPUT TYPE="button" NAME="button" Value="Submit" onClick="processData(form)">
+      <INPUT TYPE="button" NAME="close" Value="Cancel" onClick="google.script.host.close()">
+    </FORM>
+  </BODY>
+</HTML>
