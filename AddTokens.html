@@ -1,0 +1,127 @@
+<!--
+MIT License
+
+Copyright (c) [2016] [Samuel G Scudere-Weiss]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<HTML>
+  <HEAD>
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <TITLE>Test Input</TITLE>
+    <SCRIPT LANGUAGE="JavaScript">
+    
+    function processData (form) {
+        var ConsumerKey = percentEncode(form.ConsumerKey.value);
+        var ConsumerSecret = percentEncode(form.ConsumerSecret.value);
+        var KloutToken = percentEncode(form.Klout.value);
+        google.script.run.insertTokens(ConsumerKey, ConsumerSecret, KloutToken);
+        google.script.host.close();
+    }
+    
+    function percentEncode (s){
+      var encoded = "";
+      for (var i = 0; i < s.length; i++) {
+        switch(s.charAt(i)) {
+        case ' ':
+            var c='%20';
+            break;
+        case '!':
+            var c='%21';
+            break;
+        case '#':
+            var c='%23';
+            break;
+        case '$':
+            var c='%24';
+            break;
+        case '&':
+            var c='%26';
+            break;
+        case '\'':
+            var c='%27';
+            break;
+        case '(':
+            var c='%28';
+            break;
+        case ')':
+            var c='%29';
+            break;
+        case '*':
+            var c='%2A';
+            break;
+        case '+':
+            var c='%2B';
+            break;
+        case ',':
+            var c='%2C';
+            break;
+        case '/':
+            var c='%2F';
+            break;
+        case ':':
+            var c='%3A';
+            break;
+        case ';':
+            var c='%3B';
+            break;
+        case '=':
+            var c='%3D';
+            break;
+        case '?':
+            var c='%3F';
+            break;
+        case '@':
+            var c='%40';
+            break;
+        case '[':
+            var c='%5B';
+            break;
+        case ']':
+            var c='%5D';
+            break;
+        case '-':
+            var c='%2D';
+            break;
+        case '\"':
+            var c='%22';
+            break;
+        default:
+            c=s.charAt(i);
+        }
+        encoded+=c;
+      }
+      return encoded;
+    }
+    </SCRIPT>
+  </HEAD>
+  <BODY>
+    <FORM NAME="myform" ACTION="" METHOD="GET">
+      <p> For Instructions on How to get Tokens Visit www.scudweiss.com/twaccess/setup</p>
+      <p>Twitter: Consumer Key</p>
+      <INPUT TYPE="text" NAME="ConsumerKey" VALUE=""><P>
+      <p>Twitter: Consumer Secret</p>
+      <INPUT TYPE="text" NAME="ConsumerSecret" VALUE=""><P>
+      <p>Klout: Access Token</p>
+      <INPUT TYPE="text" NAME="Klout" VALUE=""><P>
+      <INPUT TYPE="button" NAME="button" Value="Submit" onClick="processData(form)">
+      <INPUT TYPE="button" NAME="close" Value="Cancel" onClick="google.script.host.close()">
+    </FORM>
+  </BODY>
+</HTML>
